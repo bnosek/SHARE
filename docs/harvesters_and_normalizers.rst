@@ -8,7 +8,7 @@ A `normalizer` takes the raw data gathered by a harvester and maps the fields to
 Start Up
 --------
 
-Installation (inside a virtual environment))::
+Installation (inside a virtual environment)::
 
     pip install -r requirements.txt
 
@@ -41,9 +41,9 @@ Visit http://localhost:5555/dashboard to keep an eye on your harvesting and norm
 Running Existing Harvesters and Normalizers
 -------------------------------------------
 
-To see a list of all providers, as well as their names for harvesting, visit http://localhost:8000/api/providers/
+To see a list of all providers and their names for harvesting, visit http://localhost:8000/api/providers/
 
-Gathering data involves a few steps:
+Steps for gathering data:
     - **Harvest** data from the original source
     - **Normalize** data, or create a ``ChangeSet``` that will format the data to be saved into SHARE Models
     - **Accept** the ``ChangeSet``` objects, and save them as ``AbstractCreativeWork`` objects in the SHARE database
@@ -52,7 +52,7 @@ Gathering data involves a few steps:
 Printing to the Console
 -----------------------
 
-It's possible to run the harvesters and normalizers separately, and print the results out to the console
+It is possible to run the harvesters and normalizers separately, and print the results out to the console
 for testing and debugging using ``./bin/share``
 
 For general help documentation::
@@ -72,7 +72,7 @@ If the harvester created a *lot* of files and you want to view a couple::
     find <provider dir i.e. edu.icpsr/> -type f -name '*.json' | head -<number to list>
 
 The harvest command will by default create a new folder at the top level with the same name as the provider name,
-but you can also specify a specific folder when running the harvest command with the ``--out`` argument.
+but you can also specify a folder when running the harvest command with the ``--out`` argument.
 
 To normalize all harvested documents::
 
@@ -96,8 +96,6 @@ To debug::
 Running Though the Full Pipeline
 """"""""""""""""""""""""""""""""
 
-Note: celery must be running for ``--async`` tasks
-
 Run a harvester and normalizer::
 
     python manage.py harvest domain.providername --async
@@ -114,31 +112,7 @@ To automatically add all harvested and accepted documents to Elasticsearch::
 Writing a Harvester and Normalizer
 ----------------------------------
 
-See the normalizers and harvesters located in the ``providers/`` directory for more examples of syntax and best practices.
-
-Best practices for OAI providers:
-    - if the provider follows OAI standards then the provider's ``app.py`` should begin like this::
-
-        from share.provider import OAIProviderAppConfig
-
-
-        class AppConfig(OAIProviderAppConfig):
-
-    - provider specific normalizers and harvesters are uneccessary for OAI providers as they all use the same ones
-
-Best practices for writing a non-OAI Harvester:
-    - the harvester should be defined in ``<provider_dir>/harvester.py``
-    - check to see if the data returned is paginated
-        - there will often be a resumption token to get the next page of results
-    - add an example record to the provider's ``__init__.py``
-    - check to see if the provider's API accepts a date range
-        - if the API does not then, if possible, check the date on each record returned and stop harvesting if the date on the record is older than the start date specified
-
-Best practices for writing a non-OAI Normalizer:
-    - the normalizer should be defined in ``<provider_dir>/normalizer.py``
-    - utilize the ``Extra`` class
-        - raw data that does not fit into a model to ensure all data is preserved
-        - raw data that are combined to fit into a model field to preserve data structure
+See the normalizers and harvesters located in the ``providers/`` directory for examples of syntax and best practices.
 
 
 SHARE Normalizing Tools
